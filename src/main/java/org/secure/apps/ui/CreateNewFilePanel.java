@@ -1,13 +1,24 @@
 package org.secure.apps.ui;
 
+import lombok.NonNull;
+
 import javax.swing.*;
 import java.awt.*;
-import java.util.Objects;
 
-import static org.secure.apps.utils.PanelServiceUtils.*;
+import static org.secure.apps.utils.PanelServiceUtils.appendPanelToMainFramePanel;
+import static org.secure.apps.utils.PanelServiceUtils.getByName;
 
+
+/**
+ * Represents a panel for creating a new file with fields for file name and password.
+ * Allows users to input file details, create the file, and navigate back to the main panel.
+ */
 public class CreateNewFilePanel extends JPanel {
 
+    /**
+     * Initializes the CreateNewFilePanel with fields for file name and password.
+     * Sets up the layout and components for users to input file details, create the file, and return to the main panel.
+     */
     public CreateNewFilePanel() {
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -58,12 +69,15 @@ public class CreateNewFilePanel extends JPanel {
         backToMainBtn.addActionListener(e -> appendPanelToMainFramePanel(getByName("mainPagePanel")));
     }
 
-    private void createNewFile(String fileName, String password) {
-        if (Objects.isNull(fileName) || password.isBlank() || fileName.isBlank()) {
-            showErrorDialog(getByName("mainFramePanel"), "Error", "file name and password should not be blank");
-        } else {
+
+    private void createNewFile(@NonNull String fileName, @NonNull String password) {
+        if (validateFileNameAndPassword(fileName, password)) {
             JPanel panel = new SecureFileContentPanel(fileName, password, "");
             appendPanelToMainFramePanel(panel);
         }
+    }
+
+    private boolean validateFileNameAndPassword(@NonNull String fileName, @NonNull String password) {
+        return !password.trim().isBlank() && !fileName.trim().isBlank();
     }
 }

@@ -5,6 +5,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
 import java.awt.*;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,17 +22,27 @@ public class PanelServiceUtils {
         return PANELS.get(name);
     }
 
+    /**
+     * Resets the text fields within the provided JPanel by setting their text to an empty string.
+     * 
+     * @param panel the JPanel containing the text fields to be reset
+     */
     public static void resetFields(JPanel panel) {
         if (panel != null) {
-            Component[] components = panel.getComponents();
-            for (Component component : components) {
-                if (component instanceof JTextField) {
-                    ((JTextField) component).setText("");
-                }
-            }
+            Arrays.stream(panel.getComponents())
+                    .filter(JTextField.class::isInstance)
+                    .forEach(component -> ((JTextField) component).setText(""));
         }
     }
 
+    /**
+ * Reloads the items in a JComboBox component within the provided JPanel with the given list of file names.
+ * If the panel is not null, iterates through the components of the panel, clears the existing items in any JComboBox,
+ * and adds each file name from the list as a new item to the JComboBox.
+ *
+ * @param panel the JPanel containing the JComboBox components to be reloaded
+ * @param fileNames the list of file names to be added to the JComboBox components
+ */
     public static void reloadSecureFileDropBox(JPanel panel, List<String> fileNames) {
         if (panel != null) {
             Component[] components = panel.getComponents();
